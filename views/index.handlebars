@@ -1,0 +1,50 @@
+<div class="jumbotron">
+    <h1 class="text-center">Eat your burgers!</h1>
+</div>
+
+
+<div class="row">
+    <div class="col-6">
+        <h2>Fresh Burgers: </h2>
+        <ul>
+            {{#each data}}
+                {{#unless devoured}}
+                    <li class="m-1">
+                        {{burger_name}}
+                        <button class="btn btn-primary btn-sm" data-id="{{id}}" onclick="devour(this)">Devour it</button>
+                    </li>
+                {{/unless}}
+            {{/each}}
+        </ul>
+    </div>
+
+    <div class="col-6">
+        <h2>Devoured Burgers: </h2>
+        <ul>
+            {{#each data}}
+                {{#if devoured}}<li>{{burger_name}}</li>{{/if}}
+            {{/each}}
+        </ul>
+    </div>
+</div>
+<hr>
+<form class="text-center mt-5" action="/api/add" method="post">
+    <h2>Add a fresh burger:</h2>
+    <label for="input">Burger name: </label>
+    <input id="input" type="text" name="burger_name">
+    <br>
+    <button class="btn btn-success" type="submit">Submit</button>
+</form>
+
+<script>
+    function devour(btn) {
+        let $btn = $(btn);
+
+        $.ajax({
+            url:'./api/devour/' + $btn.data('id'),
+            method:"PUT"
+        }).then(() => {
+            window.location.reload();
+        })
+    }
+</script>
